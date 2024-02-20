@@ -22,7 +22,6 @@ public final class Constants {
         public static final SwerveModuleConfig FR_MODULE_CONFIG = new SwerveModuleConfig();
         public static final SwerveModuleConfig RL_MODULE_CONFIG = new SwerveModuleConfig();
         public static final SwerveModuleConfig RR_MODULE_CONFIG = new SwerveModuleConfig();
-        public static final SwerveModuleConfig SR_MODULE_CONFIG = new SwerveModuleConfig();
         // Make sure to call this method to set your values before doing anything!
         public static void setupSwerveModuleConfigs() {
             // Front left module
@@ -34,8 +33,8 @@ public final class Constants {
             FL_MODULE_CONFIG.TURN_CONTROLLER_KV = 0;
             FL_MODULE_CONFIG.TURN_INVERSE = true;
             FL_MODULE_CONFIG.TURN_ENCODER_INVERSE = false;
-            FL_MODULE_CONFIG.TURN_ENCODER_OFFSET = 0.6022;
-            FL_MODULE_CONFIG.TURN_ENCODER_ID = 3;
+            FL_MODULE_CONFIG.TURN_ENCODER_OFFSET = 0.5934;
+            FL_MODULE_CONFIG.TURN_ENCODER_ID = 1;
 
             FL_MODULE_CONFIG.DRIVE_MOTOR_ID = 10;
             FL_MODULE_CONFIG.DRIVE_MOTOR_GEARING = 6.75;
@@ -58,8 +57,8 @@ public final class Constants {
             FR_MODULE_CONFIG.TURN_CONTROLLER_KV = 0;
             FR_MODULE_CONFIG.TURN_INVERSE = true;
             FR_MODULE_CONFIG.TURN_ENCODER_INVERSE = false;
-            FR_MODULE_CONFIG.TURN_ENCODER_OFFSET = 0.4671;
-            FR_MODULE_CONFIG.TURN_ENCODER_ID = 2;
+            FR_MODULE_CONFIG.TURN_ENCODER_OFFSET = 0.4645;
+            FR_MODULE_CONFIG.TURN_ENCODER_ID = 0;
 
             FR_MODULE_CONFIG.DRIVE_MOTOR_ID = 12;
             FR_MODULE_CONFIG.DRIVE_MOTOR_GEARING = 6.75;
@@ -82,8 +81,8 @@ public final class Constants {
             RL_MODULE_CONFIG.TURN_CONTROLLER_KV = 0;
             RL_MODULE_CONFIG.TURN_INVERSE = true;
             RL_MODULE_CONFIG.TURN_ENCODER_INVERSE = false;
-            RL_MODULE_CONFIG.TURN_ENCODER_OFFSET = 0.8792;
-            RL_MODULE_CONFIG.TURN_ENCODER_ID = 0;
+            RL_MODULE_CONFIG.TURN_ENCODER_OFFSET = 0.8689;
+            RL_MODULE_CONFIG.TURN_ENCODER_ID = 2;
 
             RL_MODULE_CONFIG.DRIVE_MOTOR_ID = 1;
             RL_MODULE_CONFIG.DRIVE_MOTOR_GEARING = 6.75;
@@ -106,9 +105,9 @@ public final class Constants {
             RR_MODULE_CONFIG.TURN_CONTROLLER_KV = 0;
             RR_MODULE_CONFIG.TURN_INVERSE = true;
             RR_MODULE_CONFIG.TURN_ENCODER_INVERSE = false;
-            RR_MODULE_CONFIG.TURN_ENCODER_OFFSET = 0.1986;
+            RR_MODULE_CONFIG.TURN_ENCODER_OFFSET = 0.2009;
             
-            RR_MODULE_CONFIG.TURN_ENCODER_ID = 1;
+            RR_MODULE_CONFIG.TURN_ENCODER_ID = 3;
 
             RR_MODULE_CONFIG.DRIVE_MOTOR_ID = 0;
             RR_MODULE_CONFIG.DRIVE_MOTOR_GEARING = 6.75;
