@@ -12,6 +12,8 @@ public final class Constants {
         public static final int intake = 11;
         public static final int climberLeft = 14;
         public static final int climberRight = 9;
+        public static final int wristParent = 6;
+        public static final int wristChild = 8;
 
     }
 

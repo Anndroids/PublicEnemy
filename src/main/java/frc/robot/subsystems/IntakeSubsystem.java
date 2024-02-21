@@ -28,6 +28,10 @@ private String Key;
 
   }
 
+  public void my_MotorRun(double speed){
+    m_intakeMotor.set(speed);
+  }
+
   public void stop(){
     m_intakeMotor.set(0);
   }
