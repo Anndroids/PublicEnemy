@@ -15,6 +15,7 @@ import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,8 +27,13 @@ public class Intakewrist_MM extends SubsystemBase {
   private final MotionMagicVoltage m_mmReq = new MotionMagicVoltage(0);
   private double scale = 360;
 
+  private DutyCycleEncoder revEncoder;
+
   /** Creates a new intakewrist. */
   public Intakewrist_MM() {
+
+    revEncoder = new DutyCycleEncoder(0);
+    
     TalonFXConfiguration cfg = new TalonFXConfiguration();
 
     /* Configure current limits */
@@ -62,6 +68,7 @@ public class Intakewrist_MM extends SubsystemBase {
   @Override
   public void periodic() {
     SmartDashboard.putNumber("Wrist Position", getPositionDeg());
+    SmartDashboard.putNumber("Wrist Position Rev", getRevPositionDeg());
     // This method will be called once per scheduler run
   }
 
@@ -73,6 +80,10 @@ public class Intakewrist_MM extends SubsystemBase {
 
   public double getPositionDeg(){
     return  m_fx.getPosition().getValueAsDouble() * scale;
+  }
+
+  public double getRevPositionDeg(){
+    return revEncoder.getAbsolutePosition() * scale;
   }
 
   public void resetWrist(){
