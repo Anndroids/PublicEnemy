@@ -7,9 +7,12 @@ import frc.robot.util.SwerveModule.SwerveModuleConfig;
 public final class Constants {
     public static final class MyCANID {
 
-        public static final int leftShooter = 14;
-        public static final int rightShooter = 15;
-        public static final int intake = 16;
+        public static final int leftShooter = 15;
+        public static final int rightShooter = 3;
+        public static final int intake = 11;
+        public static final int climberLeft = 14;
+        public static final int climberRight = 9;
+
     }
 
     public static final class SwerveDriveConstants {
@@ -33,7 +36,7 @@ public final class Constants {
             FL_MODULE_CONFIG.TURN_CONTROLLER_KV = 0;
             FL_MODULE_CONFIG.TURN_INVERSE = true;
             FL_MODULE_CONFIG.TURN_ENCODER_INVERSE = false;
-            FL_MODULE_CONFIG.TURN_ENCODER_OFFSET = 0.5934;
+            FL_MODULE_CONFIG.TURN_ENCODER_OFFSET = 0.2015;
             FL_MODULE_CONFIG.TURN_ENCODER_ID = 1;
 
             FL_MODULE_CONFIG.DRIVE_MOTOR_ID = 10;
@@ -57,7 +60,7 @@ public final class Constants {
             FR_MODULE_CONFIG.TURN_CONTROLLER_KV = 0;
             FR_MODULE_CONFIG.TURN_INVERSE = true;
             FR_MODULE_CONFIG.TURN_ENCODER_INVERSE = false;
-            FR_MODULE_CONFIG.TURN_ENCODER_OFFSET = 0.4645;
+            FR_MODULE_CONFIG.TURN_ENCODER_OFFSET = 0.8759;
             FR_MODULE_CONFIG.TURN_ENCODER_ID = 0;
 
             FR_MODULE_CONFIG.DRIVE_MOTOR_ID = 12;
@@ -81,7 +84,7 @@ public final class Constants {
             RL_MODULE_CONFIG.TURN_CONTROLLER_KV = 0;
             RL_MODULE_CONFIG.TURN_INVERSE = true;
             RL_MODULE_CONFIG.TURN_ENCODER_INVERSE = false;
-            RL_MODULE_CONFIG.TURN_ENCODER_OFFSET = 0.8689;
+            RL_MODULE_CONFIG.TURN_ENCODER_OFFSET = 0.4664;
             RL_MODULE_CONFIG.TURN_ENCODER_ID = 2;
 
             RL_MODULE_CONFIG.DRIVE_MOTOR_ID = 1;
@@ -105,7 +108,7 @@ public final class Constants {
             RR_MODULE_CONFIG.TURN_CONTROLLER_KV = 0;
             RR_MODULE_CONFIG.TURN_INVERSE = true;
             RR_MODULE_CONFIG.TURN_ENCODER_INVERSE = false;
-            RR_MODULE_CONFIG.TURN_ENCODER_OFFSET = 0.2009;
+            RR_MODULE_CONFIG.TURN_ENCODER_OFFSET = 0.5952;
             
             RR_MODULE_CONFIG.TURN_ENCODER_ID = 3;
 

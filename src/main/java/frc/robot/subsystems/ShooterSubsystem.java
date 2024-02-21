@@ -1,5 +1,6 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -11,10 +12,15 @@ public class ShooterSubsystem extends SubsystemBase {
   private final TalonFX m_rightShooterMotor;
 
   public ShooterSubsystem() {
+    TalonFXConfiguration config = new TalonFXConfiguration();
+    
     m_leftShooterMotor = new TalonFX(Constants.MyCANID.leftShooter);
     m_rightShooterMotor = new TalonFX(Constants.MyCANID.rightShooter);
 
-    m_leftShooterMotor.setInverted(true);
+    m_leftShooterMotor.getConfigurator().apply(config);
+    m_rightShooterMotor.getConfigurator().apply(config);
+
+    m_leftShooterMotor.setInverted(false);
     m_rightShooterMotor.setInverted(false);
   }
 

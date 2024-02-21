@@ -8,7 +8,7 @@ import frc.robot.Constants;
 
 public class IntakeSubsystem extends SubsystemBase {
 
-  private final TalonFX m_intakeMotor;
+private final TalonFX m_intakeMotor;
 final double inputspeed= .5;
 final double outputspeed= -.5;
 final String speedinput="intake speed";
@@ -26,6 +26,10 @@ private String Key;
   @Override
   public void periodic() {
 
+  }
+
+  public void stop(){
+    m_intakeMotor.set(0);
   }
 
   public void runIntakeMotor() {
