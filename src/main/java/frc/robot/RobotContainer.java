@@ -6,6 +6,8 @@ package frc.robot;
 
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -26,6 +28,8 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Intakewrist_MM;
 import frc.robot.subsystems.ShooterSubsystem;
+import edu.wpi.first.cameraserver.*;
+import edu.wpi.first.cscore.CameraServerJNI;
  
 public class RobotContainer {
   public static final XboxController m_driver = new XboxController(0);
@@ -39,7 +43,8 @@ public class RobotContainer {
   public static final Climber_Right_Subsystem m_climber_Right_Subsystem = new Climber_Right_Subsystem();
   public static final Intakewrist_MM m_intakewrist = new Intakewrist_MM();
 
-  public RobotContainer() {    
+  public RobotContainer() {   
+    SmartDashboard.putNumber("Pick Position", 202); 
     
     m_drivetrain.setDefaultCommand(new TeleOpCommand( () -> {return m_driver.getRawAxis(1);}, 
                                                       () -> {return m_driver.getRawAxis(0);}, 
@@ -57,7 +62,7 @@ public class RobotContainer {
 
   private void configureBindings() {
       Trigger ampshot = new Trigger(()-> m_operator.getRawAxis(2) > .2).and(() -> m_operator.getBButton());
-      ampshot.whileTrue(new Shooter_Run(()-> 0.1, ()->0.1, m_shooterSubsystem));
+      ampshot.whileTrue(new Shooter_Run(()-> 0.12, ()->0.12, m_shooterSubsystem));
       
       Trigger l_Trigger = new Trigger(()-> m_operator.getRawAxis(2) > .2).and(() -> !m_operator.getBButton());
       l_Trigger.whileTrue(new Shooter_Run(()-> 0.7, ()->0.5, m_shooterSubsystem));
@@ -72,16 +77,19 @@ public class RobotContainer {
       rightClimber.whileTrue(new ClimberRightRun(()-> -m_operator.getRawAxis(5), m_climber_Right_Subsystem));
 
       Trigger wristToStow = new Trigger(() -> m_operator.getXButton()).or(() -> m_driver.getXButton());
-      wristToStow.onTrue(new IntakeWrist_To_Setpoint(0.1, m_intakewrist));
+      wristToStow.onTrue(new IntakeWrist_To_Setpoint(() ->0.1, m_intakewrist));
       
       Trigger wristToPick = new Trigger(() -> m_operator.getAButton()).or(() -> m_driver.getAButton());
-      wristToPick.onTrue(new IntakeWrist_To_Setpoint(202, m_intakewrist));
+      wristToPick.onTrue(new IntakeWrist_To_Setpoint(() -> SmartDashboard.getNumber("Pick Position",202), m_intakewrist));
 
       Trigger resetWrist = new Trigger(() -> m_operator.getRawButton(7)).and(() -> m_operator.getRawButton(8));
       resetWrist.onTrue(new IntakeWrist_MM_Reset(m_intakewrist));
 
       Trigger intakeNote = new Trigger(() -> m_operator.getRightBumper());
-      intakeNote.whileTrue(new IntakeSubsystem_Run(.5, m_intakeSubsystem));
+      intakeNote.whileTrue(new IntakeSubsystem_Run(.30, m_intakeSubsystem));
+
+      Trigger resetgyro = new Trigger(() -> m_driver.getBackButtonPressed());
+      resetgyro.onTrue(m_drivetrain.runOnce(m_drivetrain:: resetGyroHeading));
     }
 
   public Command getAutonomousCommand() {

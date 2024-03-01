@@ -28,8 +28,8 @@ public class ShooterSubsystem extends SubsystemBase {
   public void periodic() {}
 
   public void c_subShoot() {
-    m_leftShooterMotor.set(0.9);
-    m_rightShooterMotor.set(0.7);
+    m_leftShooterMotor.set(2);
+    m_rightShooterMotor.set(1.8);
   }
 
     public void c_stopShooter() {

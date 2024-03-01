@@ -66,8 +66,8 @@ public class SwerveModule {
     public final Translation2d m_location;
     private final SwerveModuleConfig m_config;
 
-    private final VoltageOut m_driveVoltage = new VoltageOut(100);
-    private final VoltageOut m_turnVoltage = new VoltageOut(100);
+    private final VoltageOut m_driveVoltage = new VoltageOut(10);
+    private final VoltageOut m_turnVoltage = new VoltageOut(10);
 
     public SwerveModule(SwerveModuleConfig config) {
         // CTRE
@@ -98,9 +98,9 @@ public class SwerveModule {
         m_driveConfigurator.apply(m_driveConfig);
         m_driveVelocity = m_driveCTRE.getVelocity();
 
-        m_velocityCommand = new VelocityVoltage(100);
+        m_velocityCommand = new VelocityVoltage(10);
         m_velocityCommand.Slot = 0;
-        m_positionCommand = new PositionVoltage(100);
+        m_positionCommand = new PositionVoltage(10);
         m_positionCommand.Slot = 0;
 
         m_turnAnalogEncoder = new AnalogEncoder(config.TURN_ENCODER_ID);
@@ -144,7 +144,7 @@ public class SwerveModule {
     }
 
     public void setModuleState(SwerveModuleState state) {
-        //state = SwerveModuleState.optimize(state, new Rotation2d(getTurnHeading()));
+        state = SwerveModuleState.optimize(state, new Rotation2d(getTurnHeading()));
 
         SmartDashboard.putNumber(m_config.DRIVE_MOTOR_ID + "_SPEED_TARGET", state.speedMetersPerSecond);
         SmartDashboard.putNumber(m_config.TURN_MOTOR_ID + "_TURN_TARGET", state.angle.getRotations());
