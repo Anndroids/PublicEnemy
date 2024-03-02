@@ -11,15 +11,21 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.AutoCommands.Auto01_Shoot_N_Drive;
+import frc.robot.AutoCommands.Auto02_Shoot_N_Second_Note;
 import frc.robot.commands.ClimberLeftRun;
 import frc.robot.commands.ClimberRightRun;
 import frc.robot.commands.IntakeSubsystem_Run;
+import frc.robot.commands.IntakeSubsystem_Run_UntillSwitch;
 import frc.robot.commands.IntakeWrist_MM_Reset;
 import frc.robot.commands.IntakeWrist_To_Setpoint;
 import frc.robot.commands.Intake_Feed_Note;
+import frc.robot.commands.Intake_N_Stow;
 import frc.robot.commands.Shooter_Run;
 import frc.robot.commands.TeleOpCommand;
 import frc.robot.subsystems.Climber_Left_Subsystem;
@@ -42,8 +48,30 @@ public class RobotContainer {
   public static final Climber_Left_Subsystem m_climber_Left_Subsystem = new Climber_Left_Subsystem();
   public static final Climber_Right_Subsystem m_climber_Right_Subsystem = new Climber_Right_Subsystem();
   public static final Intakewrist_MM m_intakewrist = new Intakewrist_MM();
+  // A chooser for autonomous commands
+  SendableChooser<Command> m_chooser = new SendableChooser<>();
 
   public RobotContainer() {   
+  
+    SmartDashboard.putData(m_intakeSubsystem);
+    SmartDashboard.putData(m_intakewrist);
+
+    // Add commands to the autonomous command chooser
+    m_chooser.setDefaultOption("Do Nothing", new PrintCommand("Do Nothing"));
+    m_chooser.addOption("Auto 01 Center Shoot N Drive", new Auto01_Shoot_N_Drive(m_shooterSubsystem, 
+                                                                                      m_intakeSubsystem, 
+                                                                                      m_drivetrain));
+    m_chooser.addOption("Auto 02 Center Shoot N Second Note", new Auto02_Shoot_N_Second_Note(m_shooterSubsystem,
+                                                                                                  m_intakeSubsystem,
+                                                                                                  m_drivetrain,
+                                                                                                  m_intakewrist));
+   
+
+    // Put the chooser on the dashboard
+    SmartDashboard.putData(m_chooser);
+    SmartDashboard.putData("runintake", new IntakeSubsystem_Run_UntillSwitch(.3,m_intakeSubsystem));
+    SmartDashboard.putData("intakeandstow", new Intake_N_Stow(m_intakeSubsystem, m_intakewrist));
+
     SmartDashboard.putNumber("Pick Position", 202); 
     
     m_drivetrain.setDefaultCommand(new TeleOpCommand( () -> {return m_driver.getRawAxis(1);}, 
@@ -86,14 +114,15 @@ public class RobotContainer {
       resetWrist.onTrue(new IntakeWrist_MM_Reset(m_intakewrist));
 
       Trigger intakeNote = new Trigger(() -> m_operator.getRightBumper());
-      intakeNote.whileTrue(new IntakeSubsystem_Run(.30, m_intakeSubsystem));
-
+      //intakeNote.whileTrue(new IntakeSubsystem_Run(.30, m_intakeSubsystem));
+      intakeNote.toggleOnTrue(new Intake_N_Stow(m_intakeSubsystem, m_intakewrist));
+      
       Trigger resetgyro = new Trigger(() -> m_driver.getBackButtonPressed());
       resetgyro.onTrue(m_drivetrain.runOnce(m_drivetrain:: resetGyroHeading));
     }
 
   public Command getAutonomousCommand() {
-    return Commands.print("No autonomous command configured");
+    return m_chooser.getSelected();
   }
   
 
