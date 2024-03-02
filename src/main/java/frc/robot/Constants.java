@@ -16,6 +16,10 @@ public final class Constants {
         public static final int wristChild = 8;
 
     }
+    public static final class IntakeVarialbles{
+        public static final double STOW_POSITION = 0;
+        public static final double DEPLOY_POSITION = 202;
+    }
 
     public static final class SwerveDriveConstants {
         public static final double MAX_MODULE_SPEED_METERS_PER_SECOND = 4;

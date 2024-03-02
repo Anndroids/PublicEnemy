@@ -19,6 +19,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     public Pigeon2 gyro;
     private ChassisSpeeds m_speeds = new ChassisSpeeds();
     SwerveModuleState s = new SwerveModuleState();
+    private Double GEAR_RATIO = 6.75;
+    private Double WHEEL_DIAMETER = 4.0;
 
     public DrivetrainSubsystem() {
         gyro = new Pigeon2(0);
@@ -36,6 +38,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        SmartDashboard.putNumber("Heading", getHeading());
         SmartDashboard.putNumber("X", m_speeds.vxMetersPerSecond);
         SmartDashboard.putNumber("Y", m_speeds.vyMetersPerSecond);
         SmartDashboard.putNumber("Omega", m_speeds.omegaRadiansPerSecond);
@@ -60,8 +63,14 @@ public void resetGyroHeading() {
     gyro.reset();
 }
 
-    //public void setChassisSpeeds(double d, double e, double f, double g, double h) {
-        // TODO Auto-generated method stub
-       // throw new UnsupportedOperationException("Unimplemented method 'setChassisSpeeds'");
-    //}
+public void setGyroHeading(double setpoint){
+    gyro.setYaw(setpoint);
+}
+
+public double getHeading(){
+    return gyro.getAngle();
+}
+
+
+
 }
