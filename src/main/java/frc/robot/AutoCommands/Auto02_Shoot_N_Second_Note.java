@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
+import frc.robot.commands.DriveTrainSetHeading;
 import frc.robot.commands.IntakeWrist_To_Setpoint;
 import frc.robot.commands.Intake_Feed_Note;
 import frc.robot.commands.Intake_N_Stow;
@@ -32,6 +33,7 @@ public class Auto02_Shoot_N_Second_Note extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+      new DriveTrainSetHeading(0, m_drivetrain),
       new Auto_Shoot_PreLoad_Center(m_shooterSubsystem,m_intakeSubsystem), // Shoots Preload
 
       new IntakeWrist_To_Setpoint(()->Constants.IntakeVarialbles.DEPLOY_POSITION, m_intakewrist_MM), //Deploy Intake
@@ -46,7 +48,7 @@ public class Auto02_Shoot_N_Second_Note extends SequentialCommandGroup {
       new IntakeWrist_To_Setpoint(()->Constants.IntakeVarialbles.STOW_POSITION, m_intakewrist_MM), //ReStow If not done above
 
       new TeleOpCommand(() ->.2,() ->0.0,() ->0.0,m_drivetrain).withTimeout(3), //Drive Back to the Speaker
-      
+     
       new Auto_Shoot_PreLoad_Center(m_shooterSubsystem,m_intakeSubsystem)
 
     );

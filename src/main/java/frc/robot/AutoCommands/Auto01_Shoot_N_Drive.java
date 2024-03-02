@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.DriveTrainSetHeading;
 import frc.robot.commands.Intake_Feed_Note;
 import frc.robot.commands.Shooter_Run;
 import frc.robot.commands.TeleOpCommand;
@@ -24,6 +25,7 @@ public class Auto01_Shoot_N_Drive extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+      new DriveTrainSetHeading(0, m_drivetrain),
       new Auto_Shoot_PreLoad_Center(m_shooterSubsystem,m_intakeSubsystem),
       new TeleOpCommand(() ->-.2,() ->-0.0,() ->-0.0,m_drivetrain).withTimeout(3)
     );
