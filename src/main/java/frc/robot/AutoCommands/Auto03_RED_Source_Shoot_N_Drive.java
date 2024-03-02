@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.DriveTrainSetHeading;
 import frc.robot.commands.Intake_Feed_Note;
 import frc.robot.commands.Shooter_Run;
 import frc.robot.commands.TeleOpCommand;
@@ -18,12 +19,13 @@ import frc.robot.subsystems.ShooterSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class Auto04_Amp_Shoot_N_Drive extends SequentialCommandGroup {
-  /** Creates a new Auto04_amp_Shoot_N_Drive. */
-  public Auto04_Amp_Shoot_N_Drive(ShooterSubsystem m_shooterSubsystem, IntakeSubsystem m_intakeSubsystem, DrivetrainSubsystem m_drivetrain) {
+public class Auto03_RED_Source_Shoot_N_Drive extends SequentialCommandGroup {
+  /** Creates a new Auto03_RED_Source_Shoot_N_Drive. */
+  public Auto03_RED_Source_Shoot_N_Drive(ShooterSubsystem m_shooterSubsystem, IntakeSubsystem m_intakeSubsystem, DrivetrainSubsystem m_drivetrain) {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
+      new DriveTrainSetHeading(-60, m_drivetrain),
       new Auto_Shoot_PreLoad_Center(m_shooterSubsystem,m_intakeSubsystem),
       new TeleOpCommand(() ->-.2,() ->-0.2,() ->-0.0,m_drivetrain).withTimeout(4)
     );

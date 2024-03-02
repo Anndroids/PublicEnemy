@@ -38,6 +38,7 @@ public class DrivetrainSubsystem extends SubsystemBase {
 
     @Override
     public void periodic() {
+        SmartDashboard.putNumber("Heading", getHeading());
         SmartDashboard.putNumber("X", m_speeds.vxMetersPerSecond);
         SmartDashboard.putNumber("Y", m_speeds.vyMetersPerSecond);
         SmartDashboard.putNumber("Omega", m_speeds.omegaRadiansPerSecond);
@@ -64,6 +65,10 @@ public void resetGyroHeading() {
 
 public void setGyroHeading(double setpoint){
     gyro.setYaw(setpoint);
+}
+
+public double getHeading(){
+    return gyro.getAngle();
 }
 
 
