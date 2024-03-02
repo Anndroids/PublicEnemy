@@ -18,6 +18,8 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.AutoCommands.Auto01_Shoot_N_Drive;
 import frc.robot.AutoCommands.Auto02_Shoot_N_Second_Note;
+import frc.robot.AutoCommands.Auto03_Source_Shoot_N_Drive;
+import frc.robot.AutoCommands.Auto04_Amp_Shoot_N_Drive;
 import frc.robot.commands.ClimberLeftRun;
 import frc.robot.commands.ClimberRightRun;
 import frc.robot.commands.IntakeSubsystem_Run;
@@ -60,12 +62,17 @@ public class RobotContainer {
     m_chooser.setDefaultOption("Do Nothing", new PrintCommand("Do Nothing"));
     m_chooser.addOption("Auto 01 Center Shoot N Drive", new Auto01_Shoot_N_Drive(m_shooterSubsystem, 
                                                                                       m_intakeSubsystem, 
-                                                                                      m_drivetrain));
+                                                                                        m_drivetrain));
     m_chooser.addOption("Auto 02 Center Shoot N Second Note", new Auto02_Shoot_N_Second_Note(m_shooterSubsystem,
                                                                                                   m_intakeSubsystem,
                                                                                                   m_drivetrain,
                                                                                                   m_intakewrist));
-   
+    m_chooser.addOption("Auto 03 Source Shoot N Drive", new Auto03_Source_Shoot_N_Drive(m_shooterSubsystem, 
+                                                                                      m_intakeSubsystem, 
+                                                                                        m_drivetrain));
+    m_chooser.addOption("Auto 04 Amp Shoot N Drive", new Auto04_Amp_Shoot_N_Drive(m_shooterSubsystem, 
+                                                                                      m_intakeSubsystem, 
+                                                                                        m_drivetrain));
 
     // Put the chooser on the dashboard
     SmartDashboard.putData(m_chooser);
