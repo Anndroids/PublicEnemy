@@ -89,7 +89,6 @@ public class RobotContainer {
     SmartDashboard.putData(m_chooser);
     //SmartDashboard.putData("runintake", new IntakeSubsystem_Run_UntillSwitch(.3,m_intakeSubsystem));
     //SmartDashboard.putData("intakeandstow", new Intake_N_Stow(m_intakeSubsystem, m_intakewrist));
-    SmartDashboard.putData(new DriveTrainSetHeading(-45, m_drivetrain));
    
     
     m_drivetrain.setDefaultCommand(new TeleOpCommand( () -> {return m_driver.getRawAxis(1);}, 
