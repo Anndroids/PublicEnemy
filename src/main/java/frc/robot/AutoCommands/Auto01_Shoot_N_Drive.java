@@ -27,7 +27,7 @@ public class Auto01_Shoot_N_Drive extends SequentialCommandGroup {
     addCommands(
       new DriveTrainSetHeading(0, m_drivetrain),
       new Auto_Shoot_PreLoad_Center(m_shooterSubsystem,m_intakeSubsystem),
-      new TeleOpCommand(() ->-.2,() ->-0.0,() ->-0.0,m_drivetrain).withTimeout(3)
+      new TeleOpCommand(() ->-.2,() ->-0.0,() ->-0.0,m_drivetrain).withTimeout(5)
     );
   }
 }

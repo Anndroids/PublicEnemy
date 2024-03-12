@@ -91,6 +91,8 @@ public class SwerveModule {
         m_driveConfig.Feedback.SensorToMechanismRatio = config.DRIVE_MOTOR_GEARING;
         m_driveConfig.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RotorSensor;
         m_driveConfig.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        m_driveConfig.CurrentLimits.StatorCurrentLimit = 80;
+        m_driveConfig.CurrentLimits.StatorCurrentLimitEnable = true;
         m_driveConfig.Slot0.kP = config.DRIVE_CONTROLLER_P;
         m_driveConfig.Slot0.kD = config.DRIVE_CONTROLLER_D;
         m_driveConfig.Slot0.kS = config.DRIVE_CONTROLLER_KS;

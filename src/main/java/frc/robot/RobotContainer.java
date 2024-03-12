@@ -24,6 +24,7 @@ import frc.robot.AutoCommands.Auto03_RED_Source_Shoot_N_Drive;
 import frc.robot.AutoCommands.Auto04_RED_Amp_Shoot_N_Drive;
 import frc.robot.AutoCommands.Auto05_BLUE_Source_Shoot_N_Drive;
 import frc.robot.AutoCommands.Auto06_BLUE_Amp_Shoot_N_Drive;
+import frc.robot.AutoCommands.Auto_Shoot_PreLoad_Center;
 import frc.robot.commands.ClimberLeftRun;
 import frc.robot.commands.ClimberRightRun;
 import frc.robot.commands.DriveTrainSetHeading;
@@ -62,9 +63,12 @@ public class RobotContainer {
   
     SmartDashboard.putData(m_intakeSubsystem);
     SmartDashboard.putData(m_intakewrist);
+    SmartDashboard.putNumber("wrist angle", 95);
 
     // Add commands to the autonomous command chooser
     m_chooser.setDefaultOption("Do Nothing", new PrintCommand("Do Nothing"));
+    m_chooser.addOption("shoot preloaded note", new Auto_Shoot_PreLoad_Center(m_shooterSubsystem, 
+                                                                                  m_intakeSubsystem));
     m_chooser.addOption("Auto 01 Center Shoot N Drive", new Auto01_Shoot_N_Drive(m_shooterSubsystem, 
                                                                                       m_intakeSubsystem, 
                                                                                         m_drivetrain));
@@ -108,7 +112,7 @@ public class RobotContainer {
   private void configureBindings() {
       Trigger ampshot = new Trigger(()-> m_operator.getRawAxis(2) > .2).and(() -> m_operator.getBButton());
       ampshot.whileTrue(new Shooter_Run(()-> 0.12, ()->0.12, m_shooterSubsystem));
-      
+
       Trigger l_Trigger = new Trigger(()-> m_operator.getRawAxis(2) > .2).and(() -> !m_operator.getBButton());
       l_Trigger.whileTrue(new Shooter_Run(()-> 0.7, ()->0.5, m_shooterSubsystem));
       
@@ -127,6 +131,10 @@ public class RobotContainer {
       Trigger wristToPick = new Trigger(() -> m_operator.getAButton()).or(() -> m_driver.getAButton());
       wristToPick.onTrue(new IntakeWrist_To_Setpoint(() -> Constants.IntakeVarialbles.DEPLOY_POSITION, m_intakewrist));
 
+      Trigger wristToAmp = new Trigger(() -> m_operator.getYButton()).or(() -> m_driver.getYButton());
+      //wristToAmp.onTrue(new IntakeWrist_To_Setpoint(() -> SmartDashboard.getNumber("wrist angle", 95), m_intakewrist));
+      wristToAmp.onTrue(new IntakeWrist_To_Setpoint(() -> Constants.IntakeVarialbles.AMP_POSITION, m_intakewrist));
+      
       Trigger resetWrist = new Trigger(() -> m_operator.getRawButton(7)).and(() -> m_operator.getRawButton(8));
       resetWrist.onTrue(new IntakeWrist_MM_Reset(m_intakewrist));
 
