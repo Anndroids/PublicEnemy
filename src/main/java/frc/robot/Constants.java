@@ -18,8 +18,8 @@ public final class Constants {
     }
     public static final class IntakeVarialbles{
         public static final double STOW_POSITION = 0;
-        public static final double AMP_POSITION = 93;
-        public static final double DEPLOY_POSITION = 202;
+        public static final double AMP_POSITION = 92;
+        public static final double DEPLOY_POSITION = 200;
     }
 
     public static final class SwerveDriveConstants {

@@ -9,8 +9,10 @@ import frc.robot.subsystems.IntakeSubsystem;
 
 public class Intake_Feed_Note extends Command {
   private final IntakeSubsystem m_Subsystem;
+  private double m_speed;
   /** Creates a new Intake_Feed_Note. */
-  public Intake_Feed_Note(IntakeSubsystem subsystem) {
+  public Intake_Feed_Note(double speed, IntakeSubsystem subsystem) {
+    m_speed = speed;
     m_Subsystem = subsystem;
     addRequirements(m_Subsystem);
     // Use addRequirements() here to declare subsystem dependencies.
@@ -25,7 +27,7 @@ public class Intake_Feed_Note extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_Subsystem.feedNote();
+    m_Subsystem.my_MotorRun(m_speed);
   }
 
   // Called once the command ends or is interrupted.

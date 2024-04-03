@@ -7,6 +7,7 @@ package frc.robot.AutoCommands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.ParallelDeadlineGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
@@ -24,9 +25,9 @@ import frc.robot.subsystems.ShooterSubsystem;
 // NOTE:  Consider using this command inline, rather than writing a subclass.  For more
 // information, see:
 // https://docs.wpilib.org/en/stable/docs/software/commandbased/convenience-features.html
-public class Auto02_Shoot_N_Second_Note extends SequentialCommandGroup {
-  /** Creates a new Auto01_Shoot_N_Drive. */
-  public Auto02_Shoot_N_Second_Note(ShooterSubsystem m_shooterSubsystem, 
+public class Auto_Shoot_N_Third_Note_Right extends SequentialCommandGroup {
+  /** Creates a new Auto_Shoot_N_Third_Note_Right. */
+  public Auto_Shoot_N_Third_Note_Right(ShooterSubsystem m_shooterSubsystem, 
                                     IntakeSubsystem m_intakeSubsystem, 
                                     DrivetrainSubsystem m_drivetrain,
                                     Intakewrist_MM m_intakewrist_MM) {
@@ -41,17 +42,19 @@ public class Auto02_Shoot_N_Second_Note extends SequentialCommandGroup {
       new WaitCommand(.25),  //Delay go Get Second Note
 
       new ParallelDeadlineGroup( //Drive Untill Drive Command is Complete
-                                new TeleOpCommand(() ->-.2,() ->-0.0,() ->-0.0,m_drivetrain).withTimeout(2.25),
+                                new TeleOpCommand(() ->-.2,() ->-0.0,() ->-0.0,m_drivetrain).withTimeout(2),
                                 new Intake_N_Stow(m_intakeSubsystem,m_intakewrist_MM)
                                 ),
 
       new IntakeWrist_To_Setpoint(()->Constants.IntakeVarialbles.STOW_POSITION, m_intakewrist_MM), //ReStow If not done above
 
-      new TeleOpCommand(() ->.2,() ->0.0,() ->0.0,m_drivetrain).withTimeout(2.25), //Drive Back to the Speaker
+      new TeleOpCommand(() ->.2,() ->0.0,() ->0.0,m_drivetrain).withTimeout(2), //Drive Back to the Speaker
      
-      new Auto_Shoot_PreLoad_Center(m_shooterSubsystem,m_intakeSubsystem)
+      new Auto_Shoot_PreLoad_Center(m_shooterSubsystem,m_intakeSubsystem).withTimeout(4),
 
-      
+      new PrintCommand("Get Third Note"),
+
+      new TeleOpCommand(() ->0.0, () ->0.0, () ->0.2, m_drivetrain)
     );
   }
 }

@@ -12,13 +12,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
 private final TalonFX m_intakeMotor;
 private DigitalInput m_LimitSwitch;
-final double inputspeed= .5;
-final double outputspeed= -.5;
-final String speedinput="intake speed";
-final String speedoutput="outake speed";
-private double setPoint;
-private double backUp;
-private String Key;
+
 
   public IntakeSubsystem() {
     
@@ -43,29 +37,9 @@ private String Key;
     m_intakeMotor.set(0);
   }
 
-  public void runIntakeMotor() {
-    backUp = inputspeed;
-    Key = speedinput;
-    setPoint = getPreferencesDouble(Key, backUp);
-    
-    m_intakeMotor.set(setPoint);
-  }
 
-  public void feedNote() {
-    backUp = outputspeed;
-    Key = speedoutput;
-    setPoint = getPreferencesDouble(Key, backUp);
 
-    m_intakeMotor.set(setPoint);
-  }
 
-  private Double getPreferencesDouble(String key, double backup){
-    if (!Preferences.containsKey(key)){
-      Preferences.initDouble(key, backup);
-      Preferences.setDouble(key, backup);
-    }
-  return Preferences.getDouble(key, backup);
-  }
 
   public boolean getLimitSwitch(){
     return !m_LimitSwitch.get();

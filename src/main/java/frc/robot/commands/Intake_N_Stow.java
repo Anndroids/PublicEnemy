@@ -17,7 +17,7 @@ public class Intake_N_Stow extends SequentialCommandGroup {
     // Add your commands in the addCommands() call, e.g.
     // addCommands(new FooCommand(), new BarCommand());
     addCommands(
-                new IntakeSubsystem_Run_UntillSwitch(.3, m_intakeSubsystem),
+                new IntakeSubsystem_Run_UntillSwitch(.5, m_intakeSubsystem),
                 new IntakeWrist_To_Setpoint(()-> 0, m_intakewrist_MM)
 
 

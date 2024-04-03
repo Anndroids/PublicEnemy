@@ -57,6 +57,7 @@ public class SwerveModule {
     private final TalonFXConfigurator m_driveConfigurator;
     private final TalonFXConfiguration m_driveConfig;
     private final StatusSignal<Double> m_driveVelocity;
+    private final StatusSignal<Double> m_drivePosition;
 
     private final AnalogEncoder m_turnAnalogEncoder;
 
@@ -99,6 +100,7 @@ public class SwerveModule {
         m_driveConfig.Slot0.kV = config.DRIVE_CONTROLLER_KV;
         m_driveConfigurator.apply(m_driveConfig);
         m_driveVelocity = m_driveCTRE.getVelocity();
+        m_drivePosition = m_driveCTRE.getPosition();
 
         m_velocityCommand = new VelocityVoltage(10);
         m_velocityCommand.Slot = 0;
@@ -144,6 +146,17 @@ public class SwerveModule {
         
         return returnValue;
     }
+
+     /**
+     * Gets the drive position, in meters
+     * @return wheel position in meters
+     */
+    public double getDrivePosition() {
+        m_drivePosition.refresh();
+        double position = m_drivePosition.getValue().doubleValue();
+        return position * Math.PI * m_config.WHEEL_DIAMETER;
+    }
+
 
     public void setModuleState(SwerveModuleState state) {
         state = SwerveModuleState.optimize(state, new Rotation2d(getTurnHeading()));
