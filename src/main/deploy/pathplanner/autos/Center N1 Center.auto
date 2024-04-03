@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3023087957730821,
-      "y": 5.58606903233778
+      "x": 1.2203329399526117,
+      "y": 5.562647359246215
     },
     "rotation": 0
   },
@@ -12,9 +12,21 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "Shoot Center"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Center N1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "N1 Center"
           }
         }
       ]
