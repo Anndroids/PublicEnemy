@@ -1,0 +1,117 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.2203329399526117,
+      "y": 5.562647359246215
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Center"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Wrist Down"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake And Stow"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center N1"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wrist To Stow"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "N1 Center"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Center"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Wrist Down"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.3
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake And Stow"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center N2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wrist To Stow"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "N2 Center"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Center"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

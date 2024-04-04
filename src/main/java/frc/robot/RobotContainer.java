@@ -24,6 +24,10 @@ import frc.robot.AutoCommands.Auto03_RED_Source_Shoot_N_Drive;
 import frc.robot.AutoCommands.Auto04_RED_Amp_Shoot_N_Drive;
 import frc.robot.AutoCommands.Auto05_BLUE_Source_Shoot_N_Drive;
 import frc.robot.AutoCommands.Auto06_BLUE_Amp_Shoot_N_Drive;
+import frc.robot.AutoCommands.Auto_Shoot_PreLoad_Center;
+import frc.robot.AutoCommands.Auto_Shoot_PreLoad_Center_NuckleBall;
+import frc.robot.AutoCommands.Auto_Shoot_N_Third_Note_Left;
+import frc.robot.AutoCommands.Auto_Shoot_N_Third_Note_Right;
 import frc.robot.commands.ClimberLeftRun;
 import frc.robot.commands.ClimberRightRun;
 import frc.robot.commands.DriveTrainSetHeading;
@@ -41,6 +45,11 @@ import frc.robot.subsystems.DrivetrainSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.Intakewrist_MM;
 import frc.robot.subsystems.ShooterSubsystem;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.cameraserver.*;
 import edu.wpi.first.cscore.CameraServerJNI;
  
@@ -55,40 +64,29 @@ public class RobotContainer {
   public static final Climber_Left_Subsystem m_climber_Left_Subsystem = new Climber_Left_Subsystem();
   public static final Climber_Right_Subsystem m_climber_Right_Subsystem = new Climber_Right_Subsystem();
   public static final Intakewrist_MM m_intakewrist = new Intakewrist_MM();
-  // A chooser for autonomous commands
-  SendableChooser<Command> m_chooser = new SendableChooser<>();
+ 
+  private final SendableChooser<Command> autoChooser;
 
   public RobotContainer() {   
-  
+
+    // Register Named Commands
+    NamedCommands.registerCommand("Shoot Center", new Auto_Shoot_PreLoad_Center(m_shooterSubsystem,m_intakeSubsystem));
+    NamedCommands.registerCommand("Shoot NuckleBall", new Auto_Shoot_PreLoad_Center_NuckleBall(m_shooterSubsystem,m_intakeSubsystem));
+    NamedCommands.registerCommand("Intake Wrist Down", new IntakeWrist_To_Setpoint(()->Constants.IntakeVarialbles.DEPLOY_POSITION, m_intakewrist));
+    NamedCommands.registerCommand("Intake And Stow", new Intake_N_Stow(m_intakeSubsystem,m_intakewrist));
+    NamedCommands.registerCommand("Wrist To Stow", new IntakeWrist_To_Setpoint(()->Constants.IntakeVarialbles.STOW_POSITION, m_intakewrist));
+    // Build an auto chooser. This will use Commands.none() as the default option.
+    autoChooser = AutoBuilder.buildAutoChooser();
+    // Another option that allows you to specify the default auto by its name
+    // autoChooser = AutoBuilder.buildAutoChooser("My Default Auto");
+
+    SmartDashboard.putData("Auto Chooser", autoChooser);
+
     SmartDashboard.putData(m_intakeSubsystem);
     SmartDashboard.putData(m_intakewrist);
+    //SmartDashboard.putNumber("wrist angle", 95);
 
-    // Add commands to the autonomous command chooser
-    m_chooser.setDefaultOption("Do Nothing", new PrintCommand("Do Nothing"));
-    m_chooser.addOption("Auto 01 Center Shoot N Drive", new Auto01_Shoot_N_Drive(m_shooterSubsystem, 
-                                                                                      m_intakeSubsystem, 
-                                                                                        m_drivetrain));
-    m_chooser.addOption("Auto 02 Center Shoot N Second Note", new Auto02_Shoot_N_Second_Note(m_shooterSubsystem,
-                                                                                                  m_intakeSubsystem,
-                                                                                                  m_drivetrain,
-                                                                                                  m_intakewrist));
-    m_chooser.addOption("Auto 03 RED Source Shoot N Drive", new Auto03_RED_Source_Shoot_N_Drive(m_shooterSubsystem, 
-                                                                                      m_intakeSubsystem, 
-                                                                                        m_drivetrain));
-    m_chooser.addOption("Auto 04 RED Amp Shoot N Drive", new Auto04_RED_Amp_Shoot_N_Drive(m_shooterSubsystem, 
-                                                                                      m_intakeSubsystem, 
-                                                                                        m_drivetrain));
-    m_chooser.addOption("Auto 05 BLUE Source Shoot N Drive", new Auto05_BLUE_Source_Shoot_N_Drive(m_shooterSubsystem, 
-                                                                                      m_intakeSubsystem, 
-                                                                                        m_drivetrain));
-    m_chooser.addOption("Auto 06 BLUE Amp Shoot N Drive", new Auto06_BLUE_Amp_Shoot_N_Drive(m_shooterSubsystem, 
-                                                                                      m_intakeSubsystem, 
-                                                                                        m_drivetrain));
-
-    // Put the chooser on the dashboard
-    SmartDashboard.putData(m_chooser);
-    //SmartDashboard.putData("runintake", new IntakeSubsystem_Run_UntillSwitch(.3,m_intakeSubsystem));
-    //SmartDashboard.putData("intakeandstow", new Intake_N_Stow(m_intakeSubsystem, m_intakewrist));
+   
    
     
     m_drivetrain.setDefaultCommand(new TeleOpCommand( () -> {return m_driver.getRawAxis(1);}, 
@@ -107,13 +105,15 @@ public class RobotContainer {
 
   private void configureBindings() {
       Trigger ampshot = new Trigger(()-> m_operator.getRawAxis(2) > .2).and(() -> m_operator.getBButton());
+      // Setpoint for wooden Fields .12/.12
+      // If Field is low try .10 or .11
       ampshot.whileTrue(new Shooter_Run(()-> 0.12, ()->0.12, m_shooterSubsystem));
-      
+
       Trigger l_Trigger = new Trigger(()-> m_operator.getRawAxis(2) > .2).and(() -> !m_operator.getBButton());
       l_Trigger.whileTrue(new Shooter_Run(()-> 0.7, ()->0.5, m_shooterSubsystem));
       
       Trigger r_Trigger = new Trigger(()-> m_operator.getRawAxis(3) > .2);
-      r_Trigger.whileTrue(new Intake_Feed_Note(m_intakeSubsystem));
+      r_Trigger.whileTrue(new Intake_Feed_Note(-.3, m_intakeSubsystem));
 
       Trigger leftClimber = new Trigger(()->m_operator.getLeftBumper()).and(()-> Math.abs(m_operator.getRawAxis(1))>0.1);
       leftClimber.whileTrue(new ClimberLeftRun(()-> -m_operator.getRawAxis(1), m_climber_Left_Subsystem));
@@ -127,6 +127,10 @@ public class RobotContainer {
       Trigger wristToPick = new Trigger(() -> m_operator.getAButton()).or(() -> m_driver.getAButton());
       wristToPick.onTrue(new IntakeWrist_To_Setpoint(() -> Constants.IntakeVarialbles.DEPLOY_POSITION, m_intakewrist));
 
+      Trigger wristToAmp = new Trigger(() -> m_operator.getYButton()).or(() -> m_driver.getYButton());
+      //wristToAmp.onTrue(new IntakeWrist_To_Setpoint(() -> SmartDashboard.getNumber("wrist angle", 95), m_intakewrist));
+      wristToAmp.onTrue(new IntakeWrist_To_Setpoint(() -> Constants.IntakeVarialbles.AMP_POSITION, m_intakewrist));
+      
       Trigger resetWrist = new Trigger(() -> m_operator.getRawButton(7)).and(() -> m_operator.getRawButton(8));
       resetWrist.onTrue(new IntakeWrist_MM_Reset(m_intakewrist));
 
@@ -139,7 +143,9 @@ public class RobotContainer {
     }
 
   public Command getAutonomousCommand() {
-    return m_chooser.getSelected();
+    //return m_chooser.getSelected();
+    //return new PathPlannerAuto("New Auto");
+    return autoChooser.getSelected();
   }
   
 

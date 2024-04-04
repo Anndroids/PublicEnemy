@@ -2,15 +2,24 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.Pigeon2Configuration;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
+import com.pathplanner.lib.util.PIDConstants;
+import com.pathplanner.lib.util.ReplanningConfig;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 import frc.robot.Constants;
+import frc.robot.Constants.SwerveDriveConstants;
 import frc.robot.util.SwerveModule;
 
 public class DrivetrainSubsystem extends SubsystemBase {
@@ -21,6 +30,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
     SwerveModuleState s = new SwerveModuleState();
     private Double GEAR_RATIO = 6.75;
     private Double WHEEL_DIAMETER = 4.0;
+
+     private SwerveDriveOdometry odometry;
 
     public DrivetrainSubsystem() {
         gyro = new Pigeon2(0);
@@ -34,6 +45,23 @@ public class DrivetrainSubsystem extends SubsystemBase {
             new SwerveModule(Constants.SwerveDriveConstants.RR_MODULE_CONFIG)
         };
         m_kinematics = new SwerveDriveKinematics(m_modules[0].m_location, m_modules[1].m_location, m_modules[2].m_location, m_modules[3].m_location);
+    
+        odometry = new SwerveDriveOdometry(m_kinematics, gyro.getRotation2d(), getModulePositions());
+
+        AutoBuilder.configureHolonomic(odometry::getPoseMeters,
+            this::resetPose,
+            this::getRobotChassisSpeeds,
+            (speeds) -> m_speeds = speeds, 
+            new HolonomicPathFollowerConfig(
+                new PIDConstants(5, 0, 0),
+                new PIDConstants(4, 0, 0),
+                SwerveDriveConstants.MAX_MODULE_SPEED_METERS_PER_SECOND,
+                SwerveDriveConstants.FL_MODULE_CONFIG.MODULE_LOCATION.getNorm(),
+                new ReplanningConfig(),
+                0.004),
+            () -> DriverStation.getAlliance().map(alliance -> alliance == DriverStation.Alliance.Red).orElse(false),
+            this);
+    
     }
 
     @Override
@@ -49,6 +77,8 @@ public class DrivetrainSubsystem extends SubsystemBase {
             m_modules[i].setModuleState(states[i]);
             m_modules[i].loop();
         }
+
+        odometry.update(gyro.getRotation2d(), getModulePositions());
     }
 
     public void setChassisSpeeds(double x, double y, double omega) {
@@ -56,11 +86,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_speeds.vyMetersPerSecond = y;
         m_speeds.omegaRadiansPerSecond = omega;
 
-        m_speeds = ChassisSpeeds.fromFieldRelativeSpeeds(x, y, omega, gyro.getRotation2d());
+        m_speeds = ChassisSpeeds.fromFieldRelativeSpeeds(x, y, omega, odometry.getPoseMeters().getRotation());
     }
 
 public void resetGyroHeading() {
     gyro.reset();
+    odometry.resetPosition(gyro.getRotation2d(), getModulePositions(), new Pose2d(odometry.getPoseMeters().getTranslation(), new Rotation2d()));
 }
 
 public void setGyroHeading(double setpoint){
@@ -70,6 +101,32 @@ public void setGyroHeading(double setpoint){
 public double getHeading(){
     return gyro.getAngle();
 }
+
+public void resetPose(Pose2d newPose) {
+        odometry.resetPosition(gyro.getRotation2d(), getModulePositions(), newPose);
+    }
+
+    public ChassisSpeeds getRobotChassisSpeeds() {
+        return m_kinematics.toChassisSpeeds(getModuleStates());
+    }
+
+    private SwerveModulePosition[] getModulePositions() {
+        SwerveModulePosition[] modulePositions = new SwerveModulePosition[m_modules.length];
+        for (int i = 0; i < modulePositions.length; i++) {
+            SwerveModule module = m_modules[i];
+            modulePositions[i] = new SwerveModulePosition(module.getDrivePosition(), Rotation2d.fromRotations(module.getTurnHeading()));
+        }
+        return modulePositions;
+    }
+
+    private SwerveModuleState[] getModuleStates() {
+        SwerveModuleState[] moduleStates = new SwerveModuleState[m_modules.length];
+        for (int i = 0; i < moduleStates.length; i++) {
+            SwerveModule module = m_modules[i];
+            moduleStates[i] = new SwerveModuleState(module.getDriveVelocity(), Rotation2d.fromRotations(module.getTurnHeading()));
+        }
+        return moduleStates;
+    }
 
 
 
