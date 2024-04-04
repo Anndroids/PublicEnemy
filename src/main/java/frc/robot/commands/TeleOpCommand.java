@@ -3,6 +3,7 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -17,6 +18,8 @@ public class TeleOpCommand extends Command {
     private final SlewRateLimiter xSlewRateLimiter = new SlewRateLimiter(8);
     private final SlewRateLimiter ySlewRateLimiter = new SlewRateLimiter(8);
     private final SlewRateLimiter omegaSlewRateLimiter = new SlewRateLimiter(Math.PI * 4);
+
+    private boolean isRed = false;
 
 
     private final DrivetrainSubsystem m_drive;
@@ -34,6 +37,7 @@ public class TeleOpCommand extends Command {
 
     @Override
     public void initialize() {
+        isRed = DriverStation.getAlliance().map(alliance -> alliance == DriverStation.Alliance.Red).orElse(false);
         xSlewRateLimiter.reset(0);
         ySlewRateLimiter.reset(0);
         omegaSlewRateLimiter.reset(0);
@@ -41,11 +45,12 @@ public class TeleOpCommand extends Command {
 
     @Override
     public void execute() {
+        var invert = isRed ? 1 : -1;
         m_drive.setChassisSpeeds(
             xSlewRateLimiter.calculate(    
-                (Math.abs(m_xAxis.getAsDouble())<DEADBAND ? 0 : -m_xAxis.getAsDouble()) * Constants.SwerveDriveConstants.MAX_MODULE_SPEED_METERS_PER_SECOND),
+                (Math.abs(m_xAxis.getAsDouble())<DEADBAND ? 0 : invert * m_xAxis.getAsDouble()) * Constants.SwerveDriveConstants.MAX_MODULE_SPEED_METERS_PER_SECOND),
             ySlewRateLimiter.calculate(
-                (Math.abs(m_yAxis.getAsDouble())<DEADBAND ? 0 : -m_yAxis.getAsDouble()) * Constants.SwerveDriveConstants.MAX_MODULE_SPEED_METERS_PER_SECOND),
+                (Math.abs(m_yAxis.getAsDouble())<DEADBAND ? 0 : invert * m_yAxis.getAsDouble()) * Constants.SwerveDriveConstants.MAX_MODULE_SPEED_METERS_PER_SECOND),
             omegaSlewRateLimiter.calculate(
                 (Math.abs(m_omega.getAsDouble())<DEADBAND ? 0 : -m_omega.getAsDouble()) * Constants.SwerveDriveConstants.MAX_ROBOT_ANGULAR_SPEED_RADIANS_PER_SECOND)
     

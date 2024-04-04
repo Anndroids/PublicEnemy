@@ -70,7 +70,9 @@ public class RobotContainer {
 
     // Register Named Commands
     NamedCommands.registerCommand("Shoot Center", new Auto_Shoot_PreLoad_Center(m_shooterSubsystem,m_intakeSubsystem));
-
+    NamedCommands.registerCommand("Intake Wrist Down", new IntakeWrist_To_Setpoint(()->Constants.IntakeVarialbles.DEPLOY_POSITION, m_intakewrist));
+    NamedCommands.registerCommand("Intake And Stow", new Intake_N_Stow(m_intakeSubsystem,m_intakewrist));
+    NamedCommands.registerCommand("Wrist To Stow", new IntakeWrist_To_Setpoint(()->Constants.IntakeVarialbles.STOW_POSITION, m_intakewrist));
     // Build an auto chooser. This will use Commands.none() as the default option.
     autoChooser = AutoBuilder.buildAutoChooser();
     // Another option that allows you to specify the default auto by its name

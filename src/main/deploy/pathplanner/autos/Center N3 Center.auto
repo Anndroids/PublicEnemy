@@ -36,7 +36,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Center N1"
+                  "pathName": "Center N3"
                 }
               }
             ]
@@ -51,7 +51,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "N1 Center"
+            "pathName": "N3 Center"
           }
         },
         {

@@ -59,6 +59,55 @@
           "data": {
             "name": "Shoot Center"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Wrist Down"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.3
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake And Stow"
+                }
+              },
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "Center N2"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Wrist To Stow"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "N2 Center"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Shoot Center"
+          }
         }
       ]
     }

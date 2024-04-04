@@ -86,11 +86,12 @@ public class DrivetrainSubsystem extends SubsystemBase {
         m_speeds.vyMetersPerSecond = y;
         m_speeds.omegaRadiansPerSecond = omega;
 
-        m_speeds = ChassisSpeeds.fromFieldRelativeSpeeds(x, y, omega, gyro.getRotation2d());
+        m_speeds = ChassisSpeeds.fromFieldRelativeSpeeds(x, y, omega, odometry.getPoseMeters().getRotation());
     }
 
 public void resetGyroHeading() {
     gyro.reset();
+    odometry.resetPosition(gyro.getRotation2d(), getModulePositions(), new Pose2d(odometry.getPoseMeters().getTranslation(), new Rotation2d()));
 }
 
 public void setGyroHeading(double setpoint){

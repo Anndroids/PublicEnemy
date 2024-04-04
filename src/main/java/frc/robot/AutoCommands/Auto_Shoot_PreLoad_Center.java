@@ -25,10 +25,10 @@ public class Auto_Shoot_PreLoad_Center extends SequentialCommandGroup {
                 new ParallelCommandGroup(
                                 new Shooter_Run(()-> 0.7, ()->0.5, m_shooterSubsystem),   //(.7 and .5 past)
                                 new SequentialCommandGroup(
-                                                          new WaitCommand(1),    //Spin-up time(1.5 SEC PAST)
+                                                          new WaitCommand(.75),    //Spin-up time(1.5 SEC PAST)
                                                           new Intake_Feed_Note(-.3, m_intakeSubsystem)  //Fire Note
                                 )
-                ).withTimeout(3)  //Total Shot Time
+                ).withTimeout(1.5)  //Total Shot Time
     );
   }
 }

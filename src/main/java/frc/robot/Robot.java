@@ -5,6 +5,7 @@
 package frc.robot;
 
 import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.wpilibj.RobotController;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,7 +21,9 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     Constants.SwerveDriveConstants.setupSwerveModuleConfigs();
     m_robotContainer = new RobotContainer();
-    CameraServer.startAutomaticCapture();}
+    CameraServer.startAutomaticCapture();
+    RobotController.setBrownoutVoltage(6.3);
+  }
 
   @Override
   public void robotPeriodic() {
