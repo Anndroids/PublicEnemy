@@ -25,6 +25,7 @@ import frc.robot.AutoCommands.Auto04_RED_Amp_Shoot_N_Drive;
 import frc.robot.AutoCommands.Auto05_BLUE_Source_Shoot_N_Drive;
 import frc.robot.AutoCommands.Auto06_BLUE_Amp_Shoot_N_Drive;
 import frc.robot.AutoCommands.Auto_Shoot_PreLoad_Center;
+import frc.robot.AutoCommands.Auto_Shoot_PreLoad_Center_NuckleBall;
 import frc.robot.AutoCommands.Auto_Shoot_N_Third_Note_Left;
 import frc.robot.AutoCommands.Auto_Shoot_N_Third_Note_Right;
 import frc.robot.commands.ClimberLeftRun;
@@ -70,6 +71,7 @@ public class RobotContainer {
 
     // Register Named Commands
     NamedCommands.registerCommand("Shoot Center", new Auto_Shoot_PreLoad_Center(m_shooterSubsystem,m_intakeSubsystem));
+    NamedCommands.registerCommand("Shoot NuckleBall", new Auto_Shoot_PreLoad_Center_NuckleBall(m_shooterSubsystem,m_intakeSubsystem));
     NamedCommands.registerCommand("Intake Wrist Down", new IntakeWrist_To_Setpoint(()->Constants.IntakeVarialbles.DEPLOY_POSITION, m_intakewrist));
     NamedCommands.registerCommand("Intake And Stow", new Intake_N_Stow(m_intakeSubsystem,m_intakewrist));
     NamedCommands.registerCommand("Wrist To Stow", new IntakeWrist_To_Setpoint(()->Constants.IntakeVarialbles.STOW_POSITION, m_intakewrist));
